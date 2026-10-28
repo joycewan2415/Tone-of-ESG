@@ -3,29 +3,35 @@
 Text Mining, Data Preprocess, Large Language Model, ESG reports, Sentiment Classification
 
 **分析工具**  
-/n Python(google.generativeai, pymupdf, rapidocr_onnxruntime, pandas, re, json, time, gc)
+Python(google.generativeai, pymupdf, rapidocr_onnxruntime, pandas, re, json, time, gc)
 
 **主要目標**  
 計算台灣上市公司中文永續報告書的揭露語調分數(Tone)，並搭配ESG主題分類。其中，**語調分數(Tone)** 介於-1~1，有三種情緒，分別為**正向、負向、中立**。愈接近0為愈中立，愈接近1為愈正向，愈接近-1則為愈負向。
 
 **研究步驟**  
 Part 1:蒐集台灣上市公司的中文永續報告書  
-(1)前往ESG數位平台進行人工下載並存入Google雲端中
+(1)前往ESG數位平台進行人工下載並存入Google雲端中  
+(2)將各檔案以"股票代碼_年份"命名，例如 1101_2023，係為2023年股票代碼1101公司的永續報告書  
+(3)使用[確認檔名.py](確認檔名.py)來進行檔名驗證，以防後續分析時出現錯誤
 
 Part 2:分別計算各永續報告書的語調分數(Tone)--使用語調分析模型  
 (1)整理好公司股票代碼及簡稱：將代碼存在list中  
 (2)使用Gemini AI進行程式碼生成，下達精確的指令，透過數次的校正修改與增加所需內容，最後生成出一份完整可運行之程式碼<br>
 (3)申請Google AI studio中的API KEY  
-(4)逐一擷取PDF文字(使用pymupdf與rapidocr_onnxruntime)<br>
-(5)json斷句：用 [。！？] 切割成單句，再每兩句合併為一分析單位  
-(6)過濾雜訊：清除永續報告書中與ESG分析無關之目錄、地名通訊錄  
-(7)ESG語調分析模型  
--(7-1) 情緒分類模型：將本文分類為**正向、負向、中立**  
--(7-2) 主題分類模型：將文本分類為**環境(E)、社會(S)、治理(G)、非ESG**  
-(7)紀錄結果：使用pandas套件，將結果存成dataframe格式。  
+(4)使用[check_model.py](check_model.py)來確認申請之API KEY目前適用哪些模型  
+(5)逐一擷取PDF文字(使用pymupdf與rapidocr_onnxruntime)<br>
+(6)json斷句：用 [。！？] 切割成單句，再每兩句合併為一分析單位  
+(7)過濾雜訊：清除永續報告書中與ESG分析無關之目錄、地名通訊錄  
+(8)ESG語調分析模型  
+-(8-1) 情緒分類模型：將本文分類為**正向、負向、中立**  
+-(8-2) 主題分類模型：將文本分類為**環境(E)、社會(S)、治理(G)、非ESG**  
+(9)紀錄結果：使用pandas套件，將結果存成dataframe格式。  
+
+【程式碼】  
+程式碼可參考[ESG分析.py](ESG分析.py)
 
 【輸出結果】  
-2023年至2025年知各公司永續報告書語調分數(Tone)結果，可參考  
+2023年至2025年之各公司永續報告書語調分數(Tone)結果，可參考[ESG_量化統計結果_總表1.xlsx](ESG_量化統計結果_總表1.xlsx)  
 
 共有12種分類結果(情緒分類3種 x 主題分類4種)，欄位說明如下：<br>
 E_neutral：環境面中立情緒(句數)<br>
